@@ -1,0 +1,18 @@
+
+body {
+    font-family: monospace;
+    font-size: 2em;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(3, 50px);
+}
+
+.board-tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
