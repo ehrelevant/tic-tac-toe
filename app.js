@@ -1,8 +1,8 @@
 
 const GameBoard = (() => {
     gameBoard = [
-        'X', 'X', 'X',
-        'X', 'X', 'O',
+        'O', 'O', 'O',
+        'O', 'O', 'O',
         'O', 'O', 'O'
     ];
 
@@ -33,5 +33,18 @@ function updateDisplayBoard() {
         displayTiles[i].textContent = gameBoard[i];
     }
 }
+
+displayBoard.addEventListener('click', markTile, true)
+
+function markTile(e) {
+    const target = e.target;
+    if (target.className == 'board-tile') {
+        const ind = target.dataset['ind'];
+        console.log(ind);
+        GameBoard.gameBoard[ind] = 'X';
+        updateDisplayBoard()
+    }
+}
+
 
 updateDisplayBoard();
