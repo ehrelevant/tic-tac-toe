@@ -24,26 +24,33 @@ const Game = (() => {
             GameBoard.markTile(ind, curPlayer.symbol);
 
             if (GameBoard.testBoard(curPlayer.symbol)) {
-                winGame(curPlayer);
+                _winGame(curPlayer);
                 _gameEnded = true;
             } else if (_turn > 8) {
-                tieGame();
+                _tieGame();
                 _gameEnded = true;
             }
         }
     }
 
-    function winGame(winner) {
+    function _winGame(winner) {
         console.log(`${winner.name} wins!`);
     }
 
-    function tieGame() {
+    function _tieGame() {
         console.log('TIE');
+    }
+
+    function resetGame(newSideLength = 3) {
+        _turn = 0;
+        _players = [];
+        _gameEnded = false;
+        GameBoard.createBoard(newSideLength);
     }
 
     return {
         addPlayers, getCurrentPlayer, nextTurn,
-        catchMark
+        catchMark, resetGame
     };
 })();
 
@@ -61,6 +68,7 @@ const GameBoard = (() => {
         _sideLen = sideLength;
         _totalLen = sideLength ** 2;
         _board = (new Array(_totalLen)).fill('');
+        DisplayController.renderBoard(_board);
     }
 
     function markTile(ind, symbol) {
