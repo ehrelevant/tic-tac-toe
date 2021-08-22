@@ -8,17 +8,27 @@ const GameBoard = (() => {
     let _turn = 0;
     let _players = [];
 
+
     function addPlayers(...players) {
         _players.push(...players);
     }
 
-    function markTile(ind) {
-        const curPlayer = _players[_turn % _players.length]
-        board[ind] = curPlayer.symbol;
 
-        DisplayController.renderBoard(board);
-        _turn++;
+    function markTile(ind) {
+        if (!_tileFilled(ind)) {
+            const curPlayer = _players[_turn % _players.length]
+            board[ind] = curPlayer.symbol;
+
+            DisplayController.renderBoard(board);
+            _turn++;
+        }
     }
+
+
+    function _tileFilled(tileInd) {
+        return board[tileInd] !== '';
+    }
+
 
     return {
         board, addPlayers, markTile
