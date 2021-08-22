@@ -5,12 +5,32 @@ const GameBoard = (() => {
         '', '', '',
         '', '', ''
     ];
-    let turn = 0;
+    let _turn = 0;
+    let _players = [];
+
+    function addPlayers(...players) {
+        _players.push(...players);
+    }
+
+    function markTile(ind) {
+        const curPlayer = _players[_turn % _players.length]
+        board[ind] = curPlayer.symbol;
+
+        DisplayController.renderBoard(board);
+        _turn++;
+    }
 
     return {
-        board
+        board, addPlayers, markTile
     };
 })();
+
+
+const PlayerFactory = (name, symbol) => {
+    return {
+        name, symbol
+    };
+};
 
 
 const DisplayController = (() => {
@@ -26,16 +46,10 @@ const DisplayController = (() => {
 })();
 
 
-const PlayerFactory = (symbol) => {
-    return {
-        symbol
-    };
-};
+const player1 = PlayerFactory('P1', 'X');
+const player2 = PlayerFactory('P2', 'O');
 
-
-
-const player1 = PlayerFactory('X');
-const player2 = PlayerFactory('O');
+GameBoard.addPlayers(player1, player2);
 
 const displayBoard = document.querySelector('#board');
 const displayTiles = displayBoard.querySelectorAll('.board-tile');
