@@ -23,7 +23,8 @@ const Game = (() => {
     }
 
     return {
-        addPlayers, getCurrentPlayer, nextTurn, catchMark
+        addPlayers, getCurrentPlayer, nextTurn,
+        catchMark
     };
 })();
 
@@ -34,22 +35,78 @@ const GameBoard = (() => {
         '', '', '',
         '', '', ''
     ];
+    const _sideLen = 3;
+    const _totalLen = board.length;
+
 
     function markTile(ind) {
         if (!_isFilledTile(ind)) {
             const curPlayer = Game.getCurrentPlayer();
             board[ind] = curPlayer.symbol;
 
+            testBoard(curPlayer.symbol);
+
             DisplayController.renderBoard(board);
             Game.nextTurn();
         }
     }
 
+    function testBoard(symbol) {
+        return (_testRows(symbol) && _testColumns(symbol) && _testDiagonals(symbol));
+    }
 
     function _isFilledTile(tileInd) {
         return board[tileInd] !== '';
     }
 
+
+
+    function _testRows(testSymbol) {
+        for (let y = 0; y < _sideLen; y++) {
+            let row = board.slice((y * _sideLen), ((y + 1) * _sideLen))
+            if (row.every((symbol) => (symbol === testSymbol))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function _testColumns(testSymbol) {
+        for (let x = 0; x < _sideLen; x++) {
+            // While ".filter()" is a more common approach,
+            // using a "for..."" loop to get the columns is more (time + space) efficient
+            // Notice: O(n^2) vs O(mn); where m >> n
+
+            let col = [];
+            for (let i = x; i < _totalLen; i += _sideLen) {
+                col.push(board[i]);
+            }
+            if (col.every((symbol) => (symbol === testSymbol))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function _testDiagonals(testSymbol) {
+        let dia1 = [];
+        for (let i = 0; i < _totalLen; i += (_sideLen + 1)) {
+            dia1.push(board[i])
+        }
+        if (dia1.every((symbol) => (symbol === testSymbol))){
+            return true;
+        }
+
+        let dia2 = [];
+        for (let i = (_sideLen - 1); i < _totalLen - 1; i += (_sideLen - 1)) {
+            dia2.push(board[i])
+        }
+        if (dia2.every((symbol) => (symbol === testSymbol))){
+            return true;
+        }
+
+        return false;
+    }
 
     return {
         board, markTile
