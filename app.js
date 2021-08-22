@@ -15,11 +15,25 @@ const Game = (() => {
         _turn++;
     }
 
-    function catchMark(e) {
+    function catchMark(evt) {
         // This method may need to be removed later
+        const curPlayer = getCurrentPlayer();
+        const ind = evt.target.dataset['ind'];
+        GameBoard.markTile(ind, curPlayer.symbol);
 
-        const ind = e.target.dataset['ind'];
-        GameBoard.markTile(ind);
+        if (GameBoard.testBoard(curPlayer.symbol)) {
+            winGame(curPlayer);
+        } else if (_turn > 8) {
+            tieGame();
+        }
+    }
+
+    function winGame(winner) {
+        console.log(`${winner.name} wins!`);
+    }
+
+    function tieGame() {
+        console.log('TIE');
     }
 
     return {
@@ -39,27 +53,23 @@ const GameBoard = (() => {
     const _totalLen = board.length;
 
 
-    function markTile(ind) {
+    function markTile(ind, symbol) {
         if (!_isFilledTile(ind)) {
-            const curPlayer = Game.getCurrentPlayer();
-            board[ind] = curPlayer.symbol;
-
-            testBoard(curPlayer.symbol);
+            board[ind] = symbol;
 
             DisplayController.renderBoard(board);
             Game.nextTurn();
         }
     }
 
-    function testBoard(symbol) {
-        return (_testRows(symbol) && _testColumns(symbol) && _testDiagonals(symbol));
-    }
-
     function _isFilledTile(tileInd) {
         return board[tileInd] !== '';
     }
 
-
+    function testBoard(symbol) {
+        // Checks were not hard-coded to allow for the sake of board-size flexibility
+        return (_testRows(symbol) || _testColumns(symbol) || _testDiagonals(symbol));
+    }
 
     function _testRows(testSymbol) {
         for (let y = 0; y < _sideLen; y++) {
@@ -89,19 +99,19 @@ const GameBoard = (() => {
     }
 
     function _testDiagonals(testSymbol) {
-        let dia1 = [];
+        let diagonal1 = [];
         for (let i = 0; i < _totalLen; i += (_sideLen + 1)) {
-            dia1.push(board[i])
+            diagonal1.push(board[i])
         }
-        if (dia1.every((symbol) => (symbol === testSymbol))){
+        if (diagonal1.every((symbol) => (symbol === testSymbol))){
             return true;
         }
 
-        let dia2 = [];
+        let diagonal2 = [];
         for (let i = (_sideLen - 1); i < _totalLen - 1; i += (_sideLen - 1)) {
-            dia2.push(board[i])
+            diagonal2.push(board[i])
         }
-        if (dia2.every((symbol) => (symbol === testSymbol))){
+        if (diagonal2.every((symbol) => (symbol === testSymbol))){
             return true;
         }
 
@@ -109,7 +119,7 @@ const GameBoard = (() => {
     }
 
     return {
-        board, markTile
+        board, markTile, testBoard
     };
 })();
 
