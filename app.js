@@ -1,37 +1,51 @@
 
+const Game = (() => {
+    let _turn = 0;
+    let _players = [];
+
+    function addPlayers(...players) {
+        _players.push(...players);
+    }
+
+    function getCurrentPlayer() {
+        return _players[_turn % _players.length];
+    }
+
+    function nextTurn() {
+        _turn++;
+    }
+
+    return {
+        addPlayers, getCurrentPlayer, nextTurn
+    };
+})();
+
+
 const GameBoard = (() => {
     let board = [
         '', '', '',
         '', '', '',
         '', '', ''
     ];
-    let _turn = 0;
-    let _players = [];
-
-
-    function addPlayers(...players) {
-        _players.push(...players);
-    }
-
 
     function markTile(ind) {
-        if (!_tileFilled(ind)) {
-            const curPlayer = _players[_turn % _players.length]
+        if (!_isFilledTile(ind)) {
+            const curPlayer = Game.getCurrentPlayer();
             board[ind] = curPlayer.symbol;
 
             DisplayController.renderBoard(board);
-            _turn++;
+            Game.nextTurn();
         }
     }
 
 
-    function _tileFilled(tileInd) {
+    function _isFilledTile(tileInd) {
         return board[tileInd] !== '';
     }
 
 
     return {
-        board, addPlayers, markTile
+        board, markTile
     };
 })();
 
@@ -59,7 +73,7 @@ const DisplayController = (() => {
 const player1 = PlayerFactory('P1', 'X');
 const player2 = PlayerFactory('P2', 'O');
 
-GameBoard.addPlayers(player1, player2);
+Game.addPlayers(player1, player2);
 
 const displayBoard = document.querySelector('#board');
 const displayTiles = displayBoard.querySelectorAll('.board-tile');
