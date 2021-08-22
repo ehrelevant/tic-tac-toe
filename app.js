@@ -15,8 +15,15 @@ const Game = (() => {
         _turn++;
     }
 
+    function catchMark(e) {
+        // This method may need to be removed later
+
+        const ind = e.target.dataset['ind'];
+        GameBoard.markTile(ind);
+    }
+
     return {
-        addPlayers, getCurrentPlayer, nextTurn
+        addPlayers, getCurrentPlayer, nextTurn, catchMark
     };
 })();
 
@@ -77,5 +84,7 @@ Game.addPlayers(player1, player2);
 
 const displayBoard = document.querySelector('#board');
 const displayTiles = displayBoard.querySelectorAll('.board-tile');
+
+displayBoard.addEventListener('click', Game.catchMark, true)
 
 DisplayController.renderBoard(GameBoard.board);
