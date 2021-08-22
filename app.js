@@ -2,6 +2,7 @@
 const Game = (() => {
     let _turn = 0;
     let _players = [];
+    let _gameEnded = false;
 
     function addPlayers(...players) {
         _players.push(...players);
@@ -17,14 +18,18 @@ const Game = (() => {
 
     function catchMark(evt) {
         // This method may need to be removed later
-        const curPlayer = getCurrentPlayer();
-        const ind = evt.target.dataset['ind'];
-        GameBoard.markTile(ind, curPlayer.symbol);
+        if (!_gameEnded) {
+            const curPlayer = getCurrentPlayer();
+            const ind = evt.target.dataset['ind'];
+            GameBoard.markTile(ind, curPlayer.symbol);
 
-        if (GameBoard.testBoard(curPlayer.symbol)) {
-            winGame(curPlayer);
-        } else if (_turn > 8) {
-            tieGame();
+            if (GameBoard.testBoard(curPlayer.symbol)) {
+                winGame(curPlayer);
+                _gameEnded = true;
+            } else if (_turn > 8) {
+                tieGame();
+                _gameEnded = true;
+            }
         }
     }
 
@@ -44,26 +49,31 @@ const Game = (() => {
 
 
 const GameBoard = (() => {
-    let board = [
+    let _board = [
         '', '', '',
         '', '', '',
         '', '', ''
     ];
-    const _sideLen = 3;
-    const _totalLen = board.length;
+    let _sideLen = 3;
+    let _totalLen = _board.length;
 
+    function createBoard(sideLength) {
+        _sideLen = sideLength;
+        _totalLen = sideLength ** 2;
+        _board = (new Array(_totalLen)).fill('');
+    }
 
     function markTile(ind, symbol) {
         if (!_isFilledTile(ind)) {
-            board[ind] = symbol;
+            _board[ind] = symbol;
 
-            DisplayController.renderBoard(board);
+            DisplayController.renderBoard(_board);
             Game.nextTurn();
         }
     }
 
     function _isFilledTile(tileInd) {
-        return board[tileInd] !== '';
+        return _board[tileInd] !== '';
     }
 
     function testBoard(symbol) {
@@ -73,7 +83,7 @@ const GameBoard = (() => {
 
     function _testRows(testSymbol) {
         for (let y = 0; y < _sideLen; y++) {
-            let row = board.slice((y * _sideLen), ((y + 1) * _sideLen))
+            let row = _board.slice((y * _sideLen), ((y + 1) * _sideLen))
             if (row.every((symbol) => (symbol === testSymbol))){
                 return true;
             }
@@ -89,7 +99,7 @@ const GameBoard = (() => {
 
             let col = [];
             for (let i = x; i < _totalLen; i += _sideLen) {
-                col.push(board[i]);
+                col.push(_board[i]);
             }
             if (col.every((symbol) => (symbol === testSymbol))){
                 return true;
@@ -101,7 +111,7 @@ const GameBoard = (() => {
     function _testDiagonals(testSymbol) {
         let diagonal1 = [];
         for (let i = 0; i < _totalLen; i += (_sideLen + 1)) {
-            diagonal1.push(board[i])
+            diagonal1.push(_board[i])
         }
         if (diagonal1.every((symbol) => (symbol === testSymbol))){
             return true;
@@ -109,7 +119,7 @@ const GameBoard = (() => {
 
         let diagonal2 = [];
         for (let i = (_sideLen - 1); i < _totalLen - 1; i += (_sideLen - 1)) {
-            diagonal2.push(board[i])
+            diagonal2.push(_board[i])
         }
         if (diagonal2.every((symbol) => (symbol === testSymbol))){
             return true;
@@ -119,7 +129,7 @@ const GameBoard = (() => {
     }
 
     return {
-        board, markTile, testBoard
+        createBoard, markTile, testBoard
     };
 })();
 
@@ -153,5 +163,3 @@ const displayBoard = document.querySelector('#board');
 const displayTiles = displayBoard.querySelectorAll('.board-tile');
 
 displayBoard.addEventListener('click', Game.catchMark, true)
-
-DisplayController.renderBoard(GameBoard.board);
