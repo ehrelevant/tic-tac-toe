@@ -7,9 +7,24 @@
 </head>
 <body>
     <section id="settings_panel">
-        <button>Add Player</button>
-        <button>Remove Player</button>
-        <button>Change board</button>
+        <form id="settings_form" name="settingsForm">
+            <div class="player-settings" id="player1_settings">
+                <label for="playerName1">Player 1 Name:</label><br>
+                <input type="text" name="playerName1" value="Player 1" required><br><br>
+                <select name="playerType1">
+                    <option value="player" selected>Player</option>
+                    <option value="AI">AI</option>
+                </select>
+            </div>
+            <div class="player-settings" id="player2_settings">
+                <label for="playerName2">Player 2 Name:</label><br>
+                <input type="text" name="playerName2" value="Player 2" required><br><br>
+                <select name="playerType2">
+                    <option value="player" selected>Player</option>
+                    <option value="AI">AI</option>
+                </select>
+            </div>
+        </form>
     </section>
     <section id="board">
         <div class="board-tile" data-ind="0"></div>

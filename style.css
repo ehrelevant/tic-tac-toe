@@ -30,6 +30,21 @@ body {
     padding: 5px;
     border: 3px solid var(--border-color);
     border-radius: 10px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#settings_form {
+    display: flex;
+    flex-direction: row;
+}
+
+.player-settings {
+    margin: 0 50px;
+    text-align: center;
 }
 
 #board {
@@ -54,7 +69,9 @@ body {
     margin: 8px;
     border-radius: 16px;
 
-    transition: background-color 100ms ease-in-out;
+    cursor: pointer;
+
+    transition: background-color 100ms ease-in;
 }
 
 .board-tile:hover {
