@@ -3,26 +3,28 @@
 <head>
     <title>Tic-Tac-Toe</title>
     <meta charset="UTF-8"/>
+    <meta name="description" content="Tic-Tac-Toe Game">
+    <meta name="keywords" content="Tic-Tac-Toe, Game, Play">
+    <meta name="author" content="Ehren Castillo/KindaExists">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <section id="settings_panel">
         <form id="settings_form" name="settingsForm">
             <div class="player-settings" id="player1_settings">
-                <label for="playerName1">Player 1 Name:</label><br>
-                <input type="text" name="playerName1" value="Player 1" required><br><br>
                 <select name="playerType1">
                     <option value="player" selected>Player</option>
                     <option value="AI">AI</option>
                 </select>
+                <input type="text" name="playerName1" value="Player 1" required>
             </div>
             <div class="player-settings" id="player2_settings">
-                <label for="playerName2">Player 2 Name:</label><br>
-                <input type="text" name="playerName2" value="Player 2" required><br><br>
                 <select name="playerType2">
                     <option value="player" selected>Player</option>
                     <option value="AI">AI</option>
                 </select>
+                <input type="text" name="playerName2" value="Player 2" required>
             </div>
         </form>
     </section>
@@ -48,6 +50,9 @@
         <div class="board-tile" data-ind="7"></div>
         <div class="col-divider lower-col-divider"></div>
         <div class="board-tile" data-ind="8"></div>
+    </section>
+    <section id="restart_area">
+        <button id="restart_button">RESTART</button>
     </section>
     <script src="./app.js"></script>
 </body>
