@@ -1,14 +1,48 @@
+:root {
+    --grid-divider-color: #28110b;
+    --grid-divider-width: 8px;
+    --hover-color: #ffeed1;
+    --border-color: #28110b;
+    --main-font-color: #663c24;
+    --main-background-color: #fffbf7;
+}
+
 
 body {
+    margin: 0;
+    padding: 0;
+
+    background-color: var(--main-background-color);
     font-family: Arial, Helvetica, sans-serif;
+    color: var(--main-font-color);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#settings_panel {
+    width: 90%;
+    height: 100px;
+
+    margin: 10px;
+    margin-bottom: 20px;
+    padding: 5px;
+    border: 3px solid var(--border-color);
+    border-radius: 10px;
 }
 
 #board {
     display: grid;
     width: 400px;
     height: 400px;
-    grid-template-columns: repeat(2, 1fr 5px) 1fr;
-    grid-template-rows: repeat(2, 1fr 5px) 1fr;
+
+    border: 10px solid var(--border-color);
+    border-radius: 20px;
+    padding: 20px;
+
+    grid-template-columns: repeat(2, 1fr var(--grid-divider-width)) 1fr;
+    grid-template-rows: repeat(2, 1fr var(--grid-divider-width)) 1fr;
 }
 
 .board-tile {
@@ -16,14 +50,23 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 4em;
+
+    margin: 8px;
+    border-radius: 16px;
+
+    transition: background-color 100ms ease-in-out;
+}
+
+.board-tile:hover {
+    background-color: var(--hover-color);
 }
 
 .col-divider {
-    background-color: black;
+    background-color: var(--grid-divider-color);
 }
 
 .row-divider {
-    background-color: black;
+    background-color: var(--grid-divider-color);
 }
 
 .upper-divider {
