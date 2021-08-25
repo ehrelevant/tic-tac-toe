@@ -4,7 +4,7 @@ const Game = (() => {
     let _players = [];
     let _gameEnded = false;
 
-    function addPlayers(...players) {
+    function _addPlayers(...players) {
         _players.push(...players);
     }
 
@@ -17,7 +17,7 @@ const Game = (() => {
     }
 
     function catchMark(evt) {
-        // This method may need to be removed later
+        // This method may need to be removed later due to being an event
         if (!_gameEnded) {
             const curPlayer = getCurrentPlayer();
             const ind = evt.target.dataset['ind'];
@@ -41,16 +41,34 @@ const Game = (() => {
         console.log('TIE');
     }
 
-    function resetGame(newSideLength = 3) {
+    function resetGame() {
         _turn = 0;
-        _players = [];
         _gameEnded = false;
-        GameBoard.createBoard(newSideLength);
+        GameBoard.createBoard();
+    }
+
+    function changePlayerForm(playerInfo) {
+        _players = [];
+
+        const name1 = playerInfo['playerName1'].value
+        const type1 = playerInfo['playerType1'].value
+        const symbol1 = 'X'
+
+        const name2 = playerInfo['playerName2'].value
+        const type2 = playerInfo['playerType2'].value
+        const symbol2 = 'O'
+
+        const player1 = PlayerFactory(name1, symbol1);
+        const player2 = PlayerFactory(name2, symbol2);
+
+        _addPlayers(player1, player2);
+
+        resetGame();
     }
 
     return {
-        addPlayers, getCurrentPlayer, nextTurn,
-        catchMark, resetGame
+        getCurrentPlayer, nextTurn,
+        catchMark, resetGame, changePlayerForm
     };
 })();
 
@@ -64,7 +82,7 @@ const GameBoard = (() => {
     let _sideLen = 3;
     let _totalLen = _board.length;
 
-    function createBoard(sideLength) {
+    function createBoard(sideLength = 3) {
         _sideLen = sideLength;
         _totalLen = sideLength ** 2;
         _board = (new Array(_totalLen)).fill('');
@@ -161,13 +179,15 @@ const DisplayController = (() => {
     };
 })();
 
-
-const player1 = PlayerFactory('P1', 'X');
-const player2 = PlayerFactory('P2', 'O');
-
-Game.addPlayers(player1, player2);
-
 const displayBoard = document.querySelector('#board');
 const displayTiles = displayBoard.querySelectorAll('.board-tile');
 
 displayBoard.addEventListener('click', Game.catchMark, true)
+
+const restartBtn = document.querySelector('#restart_button');
+restartBtn.addEventListener('click', Game.resetGame);
+
+const playerSettings = document.forms['settingsForm'];
+playerSettings.addEventListener('change', () => (Game.changePlayerForm(playerSettings)));
+
+Game.changePlayerForm(playerSettings);
