@@ -34,11 +34,11 @@ const Game = (() => {
     }
 
     function _winGame(winner) {
-        console.log(`${winner.name} wins!`);
+        DisplayController.showOverlay(`${winner.name} wins!`);
     }
 
     function _tieGame() {
-        console.log('TIE');
+        DisplayController.showOverlay('Tie! Nobody wins!');
     }
 
     function resetGame() {
@@ -174,8 +174,19 @@ const DisplayController = (() => {
         }
     }
 
+    const _overlay = document.querySelector('#win_overlay');
+    const _winText = _overlay.querySelector('#win_text');
+    function showOverlay(resultText) {
+        _winText.textContent = resultText;
+        _overlay.classList.remove('hidden');
+    }
+
+    function hideOverlay() {
+        _overlay.classList.add('hidden');
+    }
+
     return {
-        renderBoard
+        renderBoard, showOverlay, hideOverlay
     };
 })();
 
@@ -189,5 +200,9 @@ restartBtn.addEventListener('click', Game.resetGame);
 
 const playerSettings = document.forms['settingsForm'];
 playerSettings.addEventListener('change', () => (Game.changePlayerForm(playerSettings)));
+
+const closeOverBtn = document.querySelector('#overlay_button');
+closeOverBtn.addEventListener('click', DisplayController.hideOverlay);
+
 
 Game.changePlayerForm(playerSettings);
