@@ -38,12 +38,10 @@ body {
     font-size: 5em;
 
     transition: color 50ms ease-in-out;
-    transition: font-size 50ms ease-in;
 }
 
 #win_text:hover {
     color: var(--hover-color);
-    font-size: 5.5em;
 }
 
 
